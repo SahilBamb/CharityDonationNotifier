@@ -7,46 +7,57 @@
 	#On a new line add 'export PERS_EMAIL = '[Your Email]' and on the next line 'export PERS_EMAILPW = [Your email PW]'
 	#After saving the file, you will need to restart the terminal/IDE for these changes to be applied 
 
+import donator
+import csv
 import os
 import smtplib
 from email.message import EmailMessage
 
-def MessageTxt(txt):
-	global msg
+def ReadEmailTemplate():
+	oFile = open('MessageTxt.txt','r')
+	Subject = oFile.readline()
+	Body = oFile.read()
+	return [Subject,Body]
+
+def ReadCSVFile():
+	with open('ExampleData.csv','r') as csv_file:
+		csv_reader = csv.reader(csv_file)
+		allDonators = []
+		for line in csv_reader:
+			Number = line[0]
+			Name = line[1]
+			Amount = line[2]
+			Date = line[3]
+			Mode = line[4]
+			Email = line[5]
+			allDonators.append(donator.Donator(Number,Name,Amount,Date,Mode,Email))
+	return allDonators
+
+
+
+txt = ReadEmailTemplate()
+Subject = txt[0]
+Body = txt[1]
+
+#READ VALUES FROM CSV FILE AND RUN THROUGH THEM
+allDonators = ReadCSVFile()
+
+
+#CREATE EMAIL WITH THOSE VALUES
+for donator in allDonators:
+	msg = EmailMessage()
 	msg['From'] = os.environ['PERS_EMAIL']
-	msg['To'] = 'MyEmail@gmail.com'
-	msg['Subject'] = 'Save Indian Farmer Receipt for [CUSTOMER_NAME]'
-	msg.set_content(txt)
+	msg['To'] = donator.Email
+	print()
+	msg['Subject'] = Subject.replace('CUSTOMER_NAME',donator.Name)
+	msg.set_content(Body.replace('REPLACE_DATE',donator.Date).replace('DONATION_AMOUNT',donator.Amount).replace('DONATION_DATE',donator.Date))
 
+	#SEND EMAIL WITH THOSE VALUES
+	with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+		smtp.login(os.environ['PERS_EMAIL'],os.environ['PERS_EMAILPW'])
+		smtp.send_message(msg)
+	exit()
+			
 
-txt = """Date: [DATE]
-
-Thank you for your donation of [DONATION_AMOUNT] to Save Indian Farmers received on [DONATION_DATE].\n
-
-Save Indian Farmers is committed to addressing issues related to farmers suicides in India. Your generous
-donation will help us reach our goal. For tax purposes, our Tax ID (EIN) is 45-3588545.\n
-
-If you have any questions or comments, let us know at info@saveindianfarmers.org. We look forward to
-your monetary support in future as we start work on more projects that positively change lives of farmers in
-India.
-
-With Kind Regards,
-
-[IMAGE_INSERT_OF_SIGNATURE]
-
-Jitendra Karkera
-President
-Save Indian Farmers
-501 C (3) organization
-http://www.saveindianfarmers.org"""
-
-
-msg = EmailMessage()
-MessageTxt(txt)
-
-#with smtplib.SMTP_SSL('localhost', 1025) as smtp:
-with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
-	smtp.login(os.environ['PERS_EMAIL'],os.environ['PERS_EMAILPW'])
-	smtp.send_message(msg)
 
 
