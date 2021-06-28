@@ -57,7 +57,6 @@ for donator in allDonators:
 	for hdr in ['Content-Type', 'Content-Transfer-Encoding', 'MIME-Version']:
 		del msg[hdr]
 	#SEND EMAIL WITH THOSE VALUES
-	exit()
 	with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
 		smtp.login(os.environ['PERS_EMAIL'],os.environ['PERS_EMAILPW'])
 		smtp.send_message(msg)
