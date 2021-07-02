@@ -1,0 +1,16 @@
+Save Indian Farmer Receipt for CUSTOMER_NAME
+Date: REPLACE_DATE
+
+Thank you for your donation of DONATION_AMOUNT to Save Indian Farmers received on DONATION_DATE.
+
+Save Indian Farmers is committed to addressing issues related to farmers suicides in India. Your generous donation will help us reach our goal. For tax purposes, our Tax ID (EIN) is 45-3588545.
+
+If you have any questions or comments, let us know at info@saveindianfarmers.org. We look forward to your monetary support in future as we start work on more projects that positively change lives of farmers in India.
+
+With Kind Regards,
+
+Jitendra Karkera
+President
+Save Indian Farmers
+501 C (3) organization
+http://www.saveindianfarmers.org
