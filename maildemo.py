@@ -40,6 +40,7 @@ allDonators = ReadCSVFile()
 
 # CREATE EMAIL WITH THOSE VALUES
 for donator in allDonators:
+    if donator.Name =='Name': continue
     print(f'Sending email to: {donator.Name} at {donator.Email}...')
     msg = EmailMessage()
     Body = Body.replace('REPLACE_DATE', donator.Date).replace('DONATION_AMOUNT', donator.Amount).replace('DONATION_DATE',
